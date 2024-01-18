@@ -10,6 +10,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   gal
   pasteboard
   permission_handler_windows
+  printing
   screen_retriever
   system_tray
   tray_manager

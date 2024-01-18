@@ -3,6 +3,10 @@ import 'dart:io';
 import 'package:gal/gal.dart';
 import 'package:logging/logging.dart';
 
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
+
 final _logger = Logger('FileSaver');
 
 /// Saves the data [stream] to the [destinationPath].
@@ -31,8 +35,30 @@ Future<void> saveFile({
 
     await sink.close();
 
+    try {
+      if (isImage) {
+        final doc = pw.Document();
+
+        final imageBytes = File(destinationPath).readAsBytesSync();
+        final image = pw.MemoryImage(imageBytes);
+
+        doc.addPage(pw.Page(
+            pageFormat: PdfPageFormat.roll80,
+            build: (pw.Context context) {
+              return pw.Center(child: pw.Image(image));
+            }));
+
+        await Printing.layoutPdf(
+            onLayout: (PdfPageFormat format) async => doc.save());
+      }
+    } catch (_) {
+      _logger.warning('Could not print file');
+    }
+
     if (saveToGallery) {
-      isImage ? await Gal.putImage(destinationPath) : await Gal.putVideo(destinationPath);
+      isImage
+          ? await Gal.putImage(destinationPath)
+          : await Gal.putVideo(destinationPath);
       await File(destinationPath).delete();
     }
 

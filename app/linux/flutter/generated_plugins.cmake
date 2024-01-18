@@ -8,6 +8,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   file_selector_linux
   gtk
   pasteboard
+  printing
   screen_retriever
   system_tray
   url_launcher_linux

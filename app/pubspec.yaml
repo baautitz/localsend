@@ -43,8 +43,10 @@ dependencies:
   pasteboard: ^0.2.0
   path: 1.8.3
   path_provider: 2.1.1
+  pdf: ^3.10.7
   permission_handler: 11.0.1
   pretty_qr_code: 3.0.0
+  printing: ^5.11.1
   refena_flutter: 1.5.0
   refena_inspector_client: 1.2.0
   routerino: 0.8.0
