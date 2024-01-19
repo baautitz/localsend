@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:gal/gal.dart';
 import 'package:logging/logging.dart';
 
 import 'package:pdf/pdf.dart';
@@ -48,18 +47,16 @@ Future<void> saveFile({
               return pw.Center(child: pw.Image(image));
             }));
 
-        await Printing.layoutPdf(
+        final print = await Printing.layoutPdf(
             onLayout: (PdfPageFormat format) async => doc.save());
+
+        if (print) {
+          await File(destinationPath).delete();
+          onProgress(savedBytes);
+        }
       }
     } catch (_) {
       _logger.warning('Could not print file');
-    }
-
-    if (saveToGallery) {
-      isImage
-          ? await Gal.putImage(destinationPath)
-          : await Gal.putVideo(destinationPath);
-      await File(destinationPath).delete();
     }
 
     onProgress(savedBytes); // always emit final event
